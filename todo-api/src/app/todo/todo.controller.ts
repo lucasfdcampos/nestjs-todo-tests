@@ -18,6 +18,8 @@ import { IndexTodoSwagger } from './swagger/index-todo.swagger';
 import { CreateTodoSwagger } from './swagger/create-todo.swagger';
 import { ShowTodoSwagger } from './swagger/show-todo.swagger';
 import { UpdateTodoSwagger } from './swagger/update-todo.swagger';
+import { BadRequestSwagger } from './helpers/swagger/bad-request.swagger';
+import { NotFoundSwagger } from './helpers/swagger/not-found.swagger';
 
 @Controller('api/v1/todos')
 @ApiTags('Todos')
@@ -43,7 +45,11 @@ export class TodoController {
     description: 'Nova task criada com sucesso',
     type: CreateTodoSwagger,
   })
-  @ApiResponse({ status: 400, description: 'Parâmetros inválidos' })
+  @ApiResponse({
+    status: 400,
+    description: 'Parâmetros inválidos',
+    type: BadRequestSwagger,
+  })
   async create(@Body() body: CreateTodoDto) {
     return await this.todoService.create(body);
   }
@@ -67,7 +73,16 @@ export class TodoController {
     description: 'Task atualizada com sucesso',
     type: UpdateTodoSwagger,
   })
-  @ApiResponse({ status: 404, description: 'Task não foi encontrada' })
+  @ApiResponse({
+    status: 400,
+    description: 'Dados inválidos',
+    type: BadRequestSwagger,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Task não foi encontrada',
+    type: NotFoundSwagger,
+  })
   async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() body: UpdateTodoDto,
@@ -81,7 +96,11 @@ export class TodoController {
     status: 204,
     description: 'Task removida com sucesso',
   })
-  @ApiResponse({ status: 404, description: 'Task não foi encontrada' })
+  @ApiResponse({
+    status: 404,
+    description: 'Task não foi encontrada',
+    type: NotFoundSwagger,
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.todoService.deleteById(id);
