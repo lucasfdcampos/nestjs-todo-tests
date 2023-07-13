@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TodoModule } from './app/todo/todo.module';
 import * as ormConfig from './orm.config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       ...ormConfig,
-      entities: [],
+      entities: [__dirname + '/**/*.entity{.js,.ts}'],
+      synchronize: true,
     }),
+    TodoModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
