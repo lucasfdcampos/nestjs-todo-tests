@@ -46,7 +46,7 @@ describe('TodoController', () => {
   });
 
   describe('index', () => {
-    it('should return a todo list entity succesfully', async () => {
+    it('should return a todo list entity successfully', async () => {
       // Act
       const result = await todoController.index();
 
